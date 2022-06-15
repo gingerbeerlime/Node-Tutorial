@@ -39,13 +39,12 @@ exports.bookinstance_detail = function(req, res, next) {
 // Display BookInstance create form on GET.
 exports.bookinstance_create_get = function(req, res, next) {
 
-    Book.find({},'title')
+    Book.find({}, 'title')
     .exec(function (err, books) {
-      if (err) { return next(err); }
-      // Successful, so render.
-      res.render('bookinstance_form', {title: 'Create BookInstance', book_list: books});
+        if (err) { return next(err); }
+        // Successful, so render.
+        res.render('bookinstance_form', {title: 'Create Book Instance', book_list: books});
     });
-
 };
 
 // Handle BookInstance create on POST.
@@ -64,31 +63,33 @@ exports.bookinstance_create_post = [
         const errors = validationResult(req);
 
         // Create a BookInstance object with escaped and trimmed data.
-        var bookinstance = new BookInstance(
-          { book: req.body.book,
+        var bookinstance = new BookInstance({
+            book: req.body.book,
             imprint: req.body.imprint,
             status: req.body.status,
             due_back: req.body.due_back
-           });
+        });
 
         if (!errors.isEmpty()) {
             // There are errors. Render form again with sanitized values and error messages.
-            Book.find({},'title')
+            Book.find({}, 'title')
                 .exec(function (err, books) {
                     if (err) { return next(err); }
                     // Successful, so render.
-                    res.render('bookinstance_form', { title: 'Create BookInstance', book_list: books, selected_book: bookinstance.book._id, errors: errors.array(), bookinstance: bookinstance });
-            });
-            return;
-        }
-        else {
+                    res.render('bookinstance_form', { title: 'Create Book Instance', book_list: books, selected_book: bookinstance.book._id, errors: errors.array(), bookinstance: bookinstance });
+                });
+                return;
+        } else {
             // Data from form is valid.
             bookinstance.save(function (err) {
                 if (err) { return next(err); }
-                   // Successful - redirect to new record.
-                   res.redirect(bookinstance.url);
-                });
+                    // Successful - redirect to new record.
+                    res.redirect(bookinstance.url)
+            })
+
         }
+
+        
     }
 ];
 
