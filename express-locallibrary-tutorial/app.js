@@ -7,6 +7,8 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var catalogRouter = require('./routes/catalog')
+var compression = require('compression');
+var helmet = require('helmet');
 
 var app = express();
 
@@ -25,6 +27,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Compress all routes
+app.use(compression());
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(helmet());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

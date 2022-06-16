@@ -6,6 +6,8 @@ var Book = require('../models/book');
 
 var async = require('async')
 
+var debug = require('debug')('author');
+
 // Display list of all Authors.
 exports.author_list = function(req, res, next) {
 
